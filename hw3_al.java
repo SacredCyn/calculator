@@ -1,90 +1,78 @@
-//Adriana Luna
-//hw3_al.java
-//September 20, 2015
-//ET 362
-//Java Programming
 
-import java.awt.*; 
-import java.awt.event.*;
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+import java.text.DecimalFormat;
 
-public class hw3_al extends JFrame implements ActionListener
-{
-JTextField tf1=null;//global textfields
-JTextField tf2=null;
-JTextField tf3=null;
-
-public static void main(String [] args)
-{
-hw3_al n=new hw3_al();
+public class FuzzyLogicCalJC{
+   public static void main(String [] args){
+      
+      // Declare variables
+      double totalDue=0.0;
+      double lowTipRate=0.1;
+      double mediumTipRate=0.15;
+      double highTipRate=0.2;
+      double tip=0.00;
+      double tipPlusTotalDue=0.00;
+      String keyboard;
+      DecimalFormat format = new DecimalFormat("0.00");
+      
+      // Request food rating from user
+      keyboard=JOptionPane.showInputDialog("Please rate the food: [0-2]"
+                                              + "\n[0] - Tasteless"
+                                              + "\n[1] - Good"
+                                              + "\n[2] - Delicious");
+      int food=Integer.parseInt(keyboard);
+      
+      // Request service rating from user
+      keyboard=JOptionPane.showInputDialog("Please rate the service: [0-2]"
+                                              + "\n[0] - Poor"
+                                              + "\n[1] - Good"
+                                              + "\n[2] - Excellent");
+      int service=Integer.parseInt(keyboard);
+      
+      // Request overall experience rating from user
+      keyboard=JOptionPane.showInputDialog("Please rate your experience: [0-4]"
+                                              + "\n[0] - Poor"
+                                              + "\n[1] - Fair"
+                                              + "\n[2] - Neutral"
+                                              + "\n[3] - Satisfactory"
+                                              + "\n[4] - Outstanding");
+      int experience=Integer.parseInt(keyboard);
+      
+      // Request total amount from user (in $)
+      keyboard=JOptionPane.showInputDialog("Enter total amount from receipt: ");
+      totalDue=Double.parseDouble(keyboard);
+      
+      
+      // Calculate and display results to the user
+      if(food ==0 || food <= 1 && service ==0 && service == 1 && experience ==0 || experience ==1){
+         tip=totalDue*lowTipRate;
+         tipPlusTotalDue=tip+totalDue;
+         JOptionPane.showMessageDialog(null,"Amount billed: $" + format.format(totalDue)
+                                          + "\nCalculated tip: $" + format.format(tip)
+                                          + "\nTotal amount including tip: $" + format.format(tipPlusTotalDue)
+                                          + "\n(Calculated tip is based on on your quality ratings)");
+      }
+      
+      else if(food ==0 || food == 1 && service ==1 || service == 2 && experience ==3){
+         tip=totalDue*mediumTipRate;
+         tipPlusTotalDue=tip+totalDue;
+         JOptionPane.showMessageDialog(null,"Amount billed: $" + format.format(totalDue)
+                                          + "\nCalculated tip: $" + format.format(tip)
+                                          + "\nTotal amount including tip: $" + format.format(tipPlusTotalDue)
+                                          + "\n(Calculated tip is based on on your quality ratings)");
+      }
+      
+      else if(food ==2 ||food == 3 && service >=2 || service == 2 && experience==4){
+         tip=totalDue*highTipRate;
+         tipPlusTotalDue=tip+totalDue;
+         JOptionPane.showMessageDialog(null,"Amount billed: $" + format.format(totalDue)
+                                          + "\nCalculated tip: $" + format.format(tip)
+                                          + "\nTotal amount including tip: $" + format.format(tipPlusTotalDue)
+                                          + "\n(Calculated tip is based on on your quality ratings)");
+      }
+      
+      else 
+         JOptionPane.showMessageDialog(null,"Does not exist ");
+      
+   }
 }
-public hw3_al()
-{
-JPanel top=new JPanel();
-JLabel b=new JLabel ("Calculator");
-b.setFont(new Font("Helvetica",Font.BOLD,40));
-top.setForeground(Color.BLUE);
-top.add(b);
-
-JPanel middle=new JPanel();
-tf1=new JTextField(20);//length of textfield
-tf2=new JTextField(20);
-tf3=new JTextField(20);
-tf1.setPreferredSize(new Dimension(300,38));//size of textfield
-tf2.setPreferredSize(new Dimension(300,38));
-tf3.setPreferredSize(new Dimension(300,38));
-middle.add(tf1);
-middle.add(tf2);
-middle.add(tf3);
-
-JPanel bottom=new JPanel();
-JButton d= new JButton("+");
-JButton e= new JButton("-");
-JButton f= new JButton("*");
-JButton g= new JButton("/");
-JButton q= new JButton("quit");
-
-bottom.add(d);
-bottom.add(e);
-bottom.add(f);
-bottom.add(g);
-bottom.add(q);
-
-d.addActionListener(this);
-e.addActionListener(this);
-f.addActionListener(this);
-g.addActionListener(this);
-q.addActionListener(this);
-
-add(top,BorderLayout.NORTH);
-add(middle,BorderLayout.CENTER);
-add(bottom,BorderLayout.SOUTH);
-setTitle("Simple Calculator");
-setSize(400,400);
-setLocationRelativeTo(null);//location after size in order to work
-setVisible(true);
-}
-
-public void actionPerformed(ActionEvent e)
-{
-setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-double x=Double.parseDouble(tf1.getText());
-double y=Double.parseDouble(tf2.getText());
-double z=0.0;
-
-String h=e.getActionCommand();
-if(h.equals("quit")){System.exit(0);}
-if(h.equals("+")){z=x+y;}
-if(h.equals("-")){z=x-y;}
-if(h.equals("*")){z=x*y;}
-if(h.equals("/")){z=x/y;}
-
-tf3.setText(String.format("%10.5f",z));//int value places resuslt to the left, the bigger the value the more to the right of the textfield is the result placed
-}
-}
-
